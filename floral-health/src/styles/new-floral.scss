@@ -1,0 +1,137 @@
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+
+  padding: 2rem;
+  height: 100vh;
+}
+
+form {
+  border-radius: 8px 8px 0 0;
+
+  padding: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+fieldset {
+  border: none;
+}
+
+.fieldset-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+fieldset legend {
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 2.1rem;
+
+  width: 100%;
+  padding-bottom: 2.2rem;
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-wrapper label{
+  font-size: 1.125rem;
+  line-height: 24px;
+
+  color: #000;
+
+  margin-bottom: 0.5rem;
+}
+
+.input-wrapper label span {
+  margin-left: 0.75rem;
+
+  font-size: 1rem;
+  line-height: 20px;
+
+  color: #000;
+}
+
+.input-wrapper label span:hover {
+  color: #6c6a71;
+}
+
+.input-wrapper input,
+.input-wrapper textarea,
+.input-wrapper select {
+  background: #FAFAFC;
+  border-radius: 8px;
+
+  height: 3.5rem;
+
+  padding: 0 1.5rem;
+
+  font-size: 1rem;
+  line-height: 26px;
+
+  color: #000;
+}
+
+.input-wrapper textarea {
+  padding: 1rem;
+  height: 168px;
+}
+
+.input-wrapper select {
+  appearance: none;
+  -webkit-appearance: none;
+
+  background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8 10L12 14L16 10' stroke='%239C98A6' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A");
+  background-repeat: no-repeat;
+  background-position: right 24px top 50%;
+}
+
+.col-3 {
+  display: flex;
+  gap: 20px;
+}
+
+.col-3 > div:nth-child(1) {
+ width: 100%;
+}
+
+footer {
+  background: #F0F0F4;
+
+  height: 8.5rem;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 2.5rem;
+  margin-bottom: 6.25rem;
+  border-radius: 0 0 8px 8px;
+}
+
+footer .button {
+  height: 3.5rem;
+  background: #2E8B57;
+
+  border-radius: 8px;
+  border: none;
+
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 26px;
+
+  color: #FFFFFF;
+}
+
+footer .button:hover {
+  background: #0d6835;
+}
+
+input:invalid {
+  border: 1px solid red;
+}

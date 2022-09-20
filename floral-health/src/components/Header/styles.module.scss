@@ -1,0 +1,45 @@
+.headerContent {
+  padding: 1rem;
+  border-bottom: 1px solid #e2e2e2;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .title {
+    display: flex;
+    align-items: center;
+    line-height: 3.3rem;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  nav {
+    height: 5rem;
+
+    a {
+      position: relative;
+      height: 5rem;
+      line-height: 5rem;
+      font-weight: 500;
+      color: black;
+
+      transition: color 0.2s;
+
+      & + a {
+        margin-left: 1.5rem;
+      }
+
+      &:hover {
+        border-bottom: 1px solid #2E8B57;
+        color: #2E8B57;    
+      }
+
+      &.active {
+        border-bottom: 1px solid #2E8B57;
+        color: #2E8B57;
+        font-weight: bold;
+      }
+    }
+  }
+}
