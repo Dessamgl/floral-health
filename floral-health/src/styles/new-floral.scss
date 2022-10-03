@@ -68,6 +68,8 @@ fieldset legend {
   background: #FAFAFC;
   border-radius: 8px;
 
+  border-color: #71a88a;
+
   height: 3.5rem;
 
   padding: 0 1.5rem;
@@ -81,6 +83,19 @@ fieldset legend {
 .input-wrapper textarea {
   padding: 1rem;
   height: 168px;
+}
+
+.input-wrapper label span {
+  margin-left: 12px;
+
+  font-size: 12px;
+  line-height: 20px;
+
+  color: #b0adb5;
+}
+
+.input-wrapper label span:hover {
+  color: #6c6a71;
 }
 
 .input-wrapper select {

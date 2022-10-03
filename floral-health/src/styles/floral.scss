@@ -4,6 +4,17 @@
 
   padding: 2rem;
   height: 100vh;
+
+  legend {
+    display: flex;
+    align-items: center;
+
+    font-weight: 500;
+    gap: 5px;
+    font-size: 24px;
+
+    padding-bottom: 2rem;
+  }
 }
 
 .card {

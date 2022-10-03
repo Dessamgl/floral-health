@@ -1,5 +1,5 @@
 //@ts-ignore-file
-import { useCallback, useEffect, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { addDoc, collection, doc, updateDoc } from 'firebase/firestore';
 
@@ -8,9 +8,9 @@ import { db } from '../services/firebase';
 import { IToast, Toast } from '../components/Toast';
 
 import '../styles/new-floral.scss';
-import { printElement } from '../utils/printElement';
 import { Button, Tooltip } from '@mui/material';
 import { whiteA, blue } from '@radix-ui/colors';
+import { useAuth } from '../hooks/useAuth';
 
 export interface Recipe {
   id: string;
@@ -35,6 +35,7 @@ export function NewRecipe() {
   const location = useLocation();
   const recipe = location.state as Recipe;
   const recipeId = params.id;
+  const { getFloralNames } = useAuth()
 
   const [caution, setCaution] = useState("");
   const [city, setCity] = useState("");
@@ -45,6 +46,7 @@ export function NewRecipe() {
   const [date, setDate] = useState("");
   const [openToast, setOpenToast] = useState(false);
   const [floralName, setFloralName] = useState<string[]>([])
+  const [isDisable, setIsDisable] = useState(false)
   const [toast, setToast] = useState<IToast>({
     altText: "",
     color: "green",
@@ -55,19 +57,15 @@ export function NewRecipe() {
     });
   
   useEffect(() => {
-    if(recipe.dataFloralSelected) {
+    if(recipe?.dataFloralSelected) {
       setFloralName(recipe.dataFloralSelected)
+      getFloralNames(recipe.dataFloralSelected)
     }
-  }, [])
+  }, [recipe.dataFloralSelected, getFloralNames])
 
-  console.log(floralName)
+  console.log(recipe?.dataFloralSelected)
 
   const recipeCollectionRef = collection(db, "recipe")
-
-
-  function handleClickPrintOut() {
-    printElement("#table-bordero");
-  }
 
 
   const handleCreateRecipe = async () => {
@@ -88,8 +86,9 @@ export function NewRecipe() {
         open: true,
         title: "Receita criada com sucesso.",
         textButton: "Ir para a tela de histórico",
-        onClickButtonToast: () => {history.push('/hisotrico')}
+        onClickButtonToast: () => {history.push('/historico')}
       })
+      setIsDisable(true)
       
     } catch (error) {
       setToast({
@@ -100,10 +99,12 @@ export function NewRecipe() {
         textButton: "Ok, tentar novamente",
         onClickButtonToast: () => {setOpenToast(false)},
       })
+      console.log(error);
     }
   }
 
   const handleEditRecipe= async (newRecipe: any) => {
+    
     try {
       const recipe = doc(db, "recipe", recipeId)
       await updateDoc(recipe, newRecipe)
@@ -116,6 +117,8 @@ export function NewRecipe() {
         textButton: "Ir para a tela histórico",
         onClickButtonToast: () => {history.push('/historico')}
       })
+
+      setIsDisable(true)
       
     } catch (error) {
         setToast({
@@ -126,6 +129,7 @@ export function NewRecipe() {
           textButton: "Ok, tentar novamente",
           onClickButtonToast: () => {setOpenToast(false)},
       })
+    
     }
   }
 
@@ -152,8 +156,8 @@ export function NewRecipe() {
       if (recipe?.city) {
         setCity(recipe.city);
       }
-      if (recipe?.floralName) {
-        setFloralName(recipe.floralName);
+      if (recipe?.dataFloralSelected) {
+        setFloralName(recipe?.dataFloralSelected);
       }
     }
   }, [recipe, recipeId]);
@@ -162,9 +166,11 @@ export function NewRecipe() {
     checkDataRecipe();
   }, [checkDataRecipe]);
 
-  const saveDataRecipe = () => {
+  const saveDataRecipe = async (event: FormEvent) => {
+    event.preventDefault();
+
     if(recipeId) {
-      handleEditRecipe({
+      await handleEditRecipe({
         caution,
         city,
         clientName,
@@ -174,7 +180,7 @@ export function NewRecipe() {
         date
       })
     } else {
-      handleCreateRecipe()
+      await handleCreateRecipe()
     }
   }
 
@@ -183,27 +189,34 @@ export function NewRecipe() {
     setPreservative(value);
   };
 
+   const disabledButtonSave = (
+    !clientName || !city || !modeOfUse || !percent || preservative === ""  || !date
+  )
+
   return (
     <>
       <Header/>
            <main className="container" id="table-bordero">
-    <form id="form">
+    <form id="form" onSubmit={saveDataRecipe}>
     <fieldset className="fieldset-wrapper">
-        <legend>Nova Receita</legend>
+    <legend>{recipeId ? "Editar Receita" : "Nova Receita"}</legend>
 
         <div className="input-wrapper">
-          <label>Cliente:</label>
-          <input 
+          <label>Paciente: <span>(somente letras)</span></label>
+          <input
+          disabled={isDisable}  
+          pattern="[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$"
           type="text" 
-          placeholder="nome cliente" 
+          placeholder="nome paciente" 
           value={clientName} 
           onChange={(e) => setClientName(e.target.value)}
+          required
         />
         </div>
 
         <div className="input-wrapper">
           <label>Nome das essências:</label>
-          <textarea 
+          <textarea
           placeholder="essências"
           value={floralName}
           disabled
@@ -211,11 +224,14 @@ export function NewRecipe() {
         </div>
 
         <div className="input-wrapper">
-          <label>Porcentagem:</label>
-          <input 
-          type="text" 
-          placeholder="porcentagem"
+          <label>Porcentagem: <span>(somente números)</span></label>
+          <input
+          disabled={isDisable}  
+          type="number" 
+          placeholder="exemplo: 20"
           value={percent} 
+          maxLength={2}
+          required
           onChange={(e) => setPercent(Number(e.target.value))}
         />
         </div>
@@ -223,11 +239,14 @@ export function NewRecipe() {
         <div className="input-wrapper">
           <label htmlFor='conservantes'>Conservantes:</label>
           <select
+          disabled={isDisable} 
           id="conservantes" 
-          placeholder="conservantes"
+          placeholder="Selecione uma opção"
           value={preservative} 
+          required
           onChange={selectChange}
         >
+            <option value="">Selecione uma opção</option>
           <option value="glicerina">Glicerina</option>
           <option value="vinagre">Vinagre de maça</option>
           <option value="conhaque">Conhaque</option>
@@ -235,17 +254,21 @@ export function NewRecipe() {
         </div>
 
         <div className="input-wrapper">
-          <label>Como tomar:</label>
-          <textarea 
+          <label>Como tomar: </label>
+          <textarea
+          disabled={isDisable}  
           placeholder="modo de uso"
+          maxLength={150}
           value={modeOfUse} 
+          required
           onChange={(e) => setModeOfUse(e.target.value)}
         />
         </div>
 
         <div className="input-wrapper">
-          <label>Cuidados:</label>
-          <textarea 
+          <label>Cuidados: </label>
+          <textarea
+          disabled={isDisable}  
           placeholder="descrição dos cuidados"
           value={caution} 
           onChange={(e) => setCaution(e.target.value)}
@@ -254,21 +277,26 @@ export function NewRecipe() {
 
 
         <div className="input-wrapper">
-          <label>Cidade:</label>
-          <input 
+          <label>Cidade: <span>(somente letras)</span></label>
+          <input
+          disabled={isDisable}  
           type="text" 
           placeholder="cidade"
+          pattern="[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$"
           value={city} 
+          required
           onChange={(e) => setCity(e.target.value)}
         />
         </div>
 
         <div className="input-wrapper">
           <label>Data:</label>
-          <input 
+          <input
+          disabled={isDisable}  
           type="date" 
           placeholder="data da receita"
           value={date} 
+          required
           onChange={(e) => setDate(e.target.value)}
         />
         </div>
@@ -276,15 +304,15 @@ export function NewRecipe() {
       
         </form>
         <footer>
-        <Tooltip title="Criar receita">
+        <Tooltip title={recipeId ? "Editar Receita" : "Adicionar Receita"}>
         <Button
         style={{ background: blue.blue12, color: whiteA.whiteA12}}
           className="button"
           type="submit" 
-          onClick={saveDataRecipe}
-       
+          disabled={disabledButtonSave || isDisable}
+          form="form"
         >
-             Criar receita
+           {recipeId ? "Editar Receita" : "Adicionar Receita"}
         </Button>
         </Tooltip>
         </footer>

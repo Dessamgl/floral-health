@@ -189,9 +189,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 
 export default function TableFloral({ data }: any) {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
-  const [dense, setDense] = React.useState(false);
   const history = useHistory();
-
 
   const rows = data;
 
@@ -224,10 +222,6 @@ export default function TableFloral({ data }: any) {
     setSelected(newSelected);
   };
 
-  const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDense(event.target.checked);
-  };
-
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
   const handleClickEdit = (
@@ -253,7 +247,6 @@ export default function TableFloral({ data }: any) {
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
           >
             <TableHeadFloral
               numSelected={selected.length}

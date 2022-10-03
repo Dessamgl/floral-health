@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { FormEvent, useCallback, useEffect, useState } from 'react'
 import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { addDoc, collection, doc, updateDoc } from 'firebase/firestore';
 
@@ -28,6 +28,7 @@ export function NewFloral() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [openToast, setOpenToast] = useState(false);
+  const [isDisable, setIsDisable] = useState(false)
   const [toast, setToast] = useState<IToast>({
   altText: "",
   color: "green",
@@ -58,6 +59,7 @@ export function NewFloral() {
       })
       setName("")
       setDescription("")
+      setIsDisable(true)
 
     } catch (error) {
       setToast({
@@ -86,6 +88,7 @@ export function NewFloral() {
         textButton: "Ir para a tela inicial",
         onClickButtonToast: () => {history.push('/floral')}
       })
+      setIsDisable(true)
       
     } catch (error) {
         setToast({
@@ -114,14 +117,16 @@ export function NewFloral() {
     checkDataFloral();
   }, [checkDataFloral]);
 
-  const saveDataFloral = () => {
+  const saveDataFloral = async (event: FormEvent) => {
+    event.preventDefault();
+
     if(floralId) {
-      handleEditFlower({
+      await handleEditFlower({
         name,
         description
       })
     } else {
-      handleCreateFlower()
+      await handleCreateFlower()
     }
   }
 
@@ -133,13 +138,14 @@ const disabledButtonSave = (
     <>
       <Header/>
       <main className="container">
-    <form id="form">
+    <form id="form" onSubmit={saveDataFloral}>
     <fieldset className="fieldset-wrapper">
         <legend>{floralId ? "Editar Essência Floral" : "Adicionar Essência Floral"}</legend>
 
         <div className="input-wrapper">
           <label>Nome da essência:</label>
-          <input 
+          <input
+          disabled={isDisable} 
           type="text" 
           placeholder="nome" 
           value={name} 
@@ -149,7 +155,8 @@ const disabledButtonSave = (
 
         <div className="input-wrapper">
           <label>Descrição da essência</label>
-          <input 
+          <input
+          disabled={isDisable} 
           type="text" 
           placeholder="descrição"
           value={description} 
@@ -164,9 +171,7 @@ const disabledButtonSave = (
         style={{ background: blue.blue12, color: whiteA.whiteA12}}
           className="button"
           type="submit" 
-          onClick={saveDataFloral}
-          disabled={disabledButtonSave}
-       
+          disabled={disabledButtonSave || isDisable}
         >
          {floralId ? "Editar Floral" : "Adicionar Floral"}
         </Button>

@@ -16,7 +16,7 @@ const firebaseConfig = initializeApp({
 
 const db = getFirestore(firebaseConfig)
 
-const auth = getAuth();
+const auth = getAuth(firebaseConfig);
 const database = getDatabase();
 
 

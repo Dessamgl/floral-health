@@ -10,8 +10,24 @@ export function printElement(querySelector: string) {
   const styles = `<style>
   @media print{
     @page {
-      size: landscape
+     
     }
+  }
+
+  legend {
+    margin-bottom: 25px;
+    font-size: 24px;
+  }
+
+  strong {
+    display: flex;
+    margin-bottom: 10px;
+    flex-direction: row;
+  }
+
+  strong p, span {
+    font-weight: 400;
+    margin-left: 5px;
   }
 
   body {

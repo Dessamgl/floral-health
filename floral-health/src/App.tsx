@@ -2,9 +2,6 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
 import { Home } from "./pages/Home";
 import { NewFloral } from "./pages/NewFloral";
-import { Room } from './pages/Room';
-import { AdminRoom } from './pages/AdminRoom';
-
 import { AuthContextProvider } from './contexts/AuthContext'
 import { Floral } from './pages/Floral';
 import { NewRecipe } from './pages/NewRecipe';
@@ -25,7 +22,6 @@ function App() {
           <Route path="/anamnese" exact component={NewAnamnese} />
           <Route path="/anamnese/:id" exact component={NewAnamnese} />
           <Route path="/historico" exact component={Historic} />
-          <Route path="/admin/rooms/:id" component={AdminRoom} />
         </Switch>
       </AuthContextProvider>
     </BrowserRouter>
