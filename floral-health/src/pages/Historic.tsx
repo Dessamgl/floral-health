@@ -51,7 +51,7 @@ export function Historic() {
     }
 
     fetchData();
-  }, [recipeCollectionRef])
+  }, [])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,7 +62,7 @@ export function Historic() {
     } 
 
     fetchData()
-  }, [anamneseCollectionRef])
+  }, [])
 
   console.log(floralName)
 

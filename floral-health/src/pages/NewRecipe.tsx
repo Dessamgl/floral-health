@@ -61,7 +61,7 @@ export function NewRecipe() {
       setFloralName(recipe.dataFloralSelected)
       getFloralNames(recipe.dataFloralSelected)
     }
-  }, [recipe.dataFloralSelected, getFloralNames])
+  }, [])
 
   console.log(recipe?.dataFloralSelected)
 

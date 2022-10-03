@@ -22,7 +22,7 @@ export function Floral() {
   const getFlowers = useCallback( async () => {
     const data = await getDocs(flowerCollectionRef)
     setFloral(data.docs.map(doc => ({...doc.data(), id: doc.id}) as Floral))
-  } , [flowerCollectionRef]);
+  } , []);
 
   useEffect(() => {
     getFlowers()
