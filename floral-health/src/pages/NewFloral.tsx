@@ -17,6 +17,7 @@ interface FloralParams {
 interface StateFloralProps {
   name: string;
   description: string;
+  group: string;
 }
 
 export function NewFloral() {
@@ -26,6 +27,7 @@ export function NewFloral() {
   const floral = location.state as StateFloralProps;
   const floralId = params.id;
   const [name, setName] = useState('');
+  const [group, setGroup] = useState('');
   const [description, setDescription] = useState('');
   const [openToast, setOpenToast] = useState(false);
   const [isDisable, setIsDisable] = useState(false)
@@ -45,6 +47,7 @@ export function NewFloral() {
       await addDoc(flowerCollectionRef, {
         name,
         description,
+        group
       })
 
       setToast({
@@ -107,6 +110,9 @@ export function NewFloral() {
       if (floral?.description) {
         setDescription(floral.description);
       }
+      if (floral?.group) {
+        setDescription(floral.group);
+      }
     }
   }, [floral, floralId]);
 
@@ -120,7 +126,8 @@ export function NewFloral() {
     if(floralId) {
       await handleEditFlower({
         name,
-        description
+        description,
+        group
       })
     } else {
       await handleCreateFlower()
@@ -158,6 +165,16 @@ const disabledButtonSave = (
           placeholder="descrição"
           value={description} 
           onChange={(e) => setDescription(e.target.value)}
+        />
+        </div>
+        <div className="input-wrapper">
+          <label>Grupo</label>
+          <input
+          disabled={isDisable} 
+          type="text" 
+          placeholder="grupo a qual pertence"
+          value={group} 
+          onChange={(e) => setGroup(e.target.value)}
         />
         </div>
       </fieldset>
