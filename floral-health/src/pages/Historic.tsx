@@ -37,7 +37,6 @@ export function Historic() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [anamneses, setAnamnese] = useState<Anamnese[]>([]);
   const { floralName } = useAuth()
-  console.log(floralName)
 
   const recipeCollectionRef = collection(db, "recipe")
   const anamneseCollectionRef = collection(db, "anamnese")
@@ -46,7 +45,6 @@ export function Historic() {
     const fetchData = async () => {
       const data = await getDocs(recipeCollectionRef)
       const response = await data.docs?.map(doc => ({...doc.data(), id: doc.id}) as Recipe)
-      console.log(response)
       setRecipes(response)
     }
 
@@ -57,14 +55,11 @@ export function Historic() {
     const fetchData = async () => {
       const data = await getDocs(anamneseCollectionRef)
       const response = await data.docs?.map(doc => ({...doc.data(), id: doc.id}) as Anamnese)
-      console.log(response)
       setAnamnese(response)
     } 
 
     fetchData()
   }, [])
-
-  console.log(floralName)
 
   const handleClickEditRecipe = (
     id: string,

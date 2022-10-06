@@ -151,8 +151,6 @@ export function NewAnamnese() {
         textButton: "Ir para a tela de histórico",
         onClickButtonToast: () => {history.push('/historico')}
       })
-
-      setIsDisable(true)
       
     } catch (error) {
       setToast({

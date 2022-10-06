@@ -18,7 +18,7 @@ export interface Recipe {
   city?: string;
   clientName?: string;
   date?: string;
-  modOfUse?: string;
+  modeOfUse?: string;
   percent?: number;
   preservative?: string;
   floralName?: string[];
@@ -63,8 +63,6 @@ export function NewRecipe() {
     }
   }, [])
 
-  console.log(recipe?.dataFloralSelected)
-
   const recipeCollectionRef = collection(db, "recipe")
 
 
@@ -99,7 +97,6 @@ export function NewRecipe() {
         textButton: "Ok, tentar novamente",
         onClickButtonToast: () => {setOpenToast(false)},
       })
-      console.log(error);
     }
   }
 
@@ -118,7 +115,7 @@ export function NewRecipe() {
         onClickButtonToast: () => {history.push('/historico')}
       })
 
-      setIsDisable(true)
+     
       
     } catch (error) {
         setToast({
@@ -141,8 +138,8 @@ export function NewRecipe() {
       if (recipe?.clientName) {
         setClientName(recipe.clientName);
       }
-      if (recipe?.modOfUse) {
-        setModeOfUse(recipe.modOfUse);
+      if (recipe?.modeOfUse) {
+        setModeOfUse(recipe.modeOfUse);
       }
       if (recipe?.percent) {
         setPercent(recipe.percent);
@@ -218,7 +215,7 @@ export function NewRecipe() {
           <label>Nome das essências:</label>
           <textarea
           placeholder="essências"
-          value={floralName}
+          value={!recipeId ? floralName : ["401 Impatiens, 401 Impatiens, 504 Agrimony"]}
           disabled
         />
         </div>

@@ -40,8 +40,6 @@ export function NewFloral() {
 
   const flowerCollectionRef = collection(db, "floral")
 
-  console.log(floral)
-
   const handleCreateFlower = async () => {
     try {
       await addDoc(flowerCollectionRef, {
@@ -59,7 +57,6 @@ export function NewFloral() {
       })
       setName("")
       setDescription("")
-      setIsDisable(true)
 
     } catch (error) {
       setToast({
@@ -88,7 +85,7 @@ export function NewFloral() {
         textButton: "Ir para a tela inicial",
         onClickButtonToast: () => {history.push('/floral')}
       })
-      setIsDisable(true)
+   
       
     } catch (error) {
         setToast({
@@ -172,6 +169,7 @@ const disabledButtonSave = (
           className="button"
           type="submit" 
           disabled={disabledButtonSave || isDisable}
+          form="form"
         >
          {floralId ? "Editar Floral" : "Adicionar Floral"}
         </Button>
